@@ -1,0 +1,163 @@
+@import "./variables.scss";
+
+/*  -- flex弹性布局 -- */
+.flex {
+  display: flex;
+}
+
+@each $size in 0, 1, 2, 3 {
+  .flex-#{$size} {
+    flex-grow: $size;
+  }
+}
+
+@each $direction in row, column {
+  .flex-#{$direction} {
+    flex-direction: $direction;
+  }
+}
+
+@each $wrap in wrap, nowrap {
+  .flex-#{$wrap} {
+    flex-wrap: $wrap;
+  }
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+/*  -- 内外边距 -- */
+@each $name in m, mt, mr, mb, ml, mx, my {
+  @each $size in 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 {
+    .#{$name}#{$size} {
+      @if $name == mt { margin-top: #{$size}px; }
+      @else if $name == mr { margin-right: #{$size}px; }
+      @else if $name == mb { margin-bottom: #{$size}px; }
+      @else if $name == ml { margin-left: #{$size}px; }
+      @else if $name == mx { margin-left: #{$size}px; margin-right: #{$size}px; }
+      @else if $name == my { margin-top: #{$size}px; margin-bottom: #{$size}px; }
+      @else { margin: #{$size}px; }
+    }
+  }
+}
+
+@each $name in p, pt, pr, pb, pl, px, py {
+  @each $size in 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 {
+    .#{$name}#{$size} {
+      @if $name == pt { padding-top: #{$size}px; }
+      @else if $name == pr { padding-right: #{$size}px; }
+      @else if $name == pb { padding-bottom: #{$size}px; }
+      @else if $name == pl { padding-left: #{$size}px; }
+      @else if $name == px { padding-left: #{$size}px; padding-right: #{$size}px; }
+      @else if $name == py { padding-top: #{$size}px; padding-bottom: #{$size}px; }
+      @else { padding: #{$size}px; }
+    }
+  }
+}
+
+/*  -- 字体相关 -- */
+@each $size in 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 {
+  .ft#{$size} {
+    font-size: #{$size}px;
+  }
+}
+
+@each $type in left, center, right {
+  .text-#{$type} {
+    text-align: #{$type};
+  }
+}
+
+@each $weight in lighter, normal, bold, bolder {
+  .text-#{$weight}{
+    font-weight: $weight;
+  }
+}
+
+.text-Abc {
+  text-transform: Capitalize;
+}
+
+.text-ABC {
+  text-transform: Uppercase;
+}
+
+.text-abc {
+  text-transform: Lowercase;
+}
+
+.text-cut {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*  -- 边框 -- */
+@each $name in b, bl, br, bb, bt, bx, by {
+  @each $size in 1 {
+    .#{$name}#{$size} {
+      @if $name == bt { border-top: #{$size}px solid #{$borderColor} }
+      @else if $name == br { border-right: #{$size}px solid #{$borderColor}; }
+      @else if $name == bb { border-bottom: #{$size}px solid #{$borderColor}; }
+      @else if $name == bl { border-left: #{$size}px solid #{$borderColor}; }
+      @else if $name == bx { border-left: #{$size}px solid #{$borderColor}; border-right: #{$size}px solid #{$borderColor}; }
+      @else if $name == by { border-top: #{$size}px solid #{$borderColor}; border-bottom: #{$size}px solid #{$borderColor}; }
+      @else { border: #{$size}px solid #{$borderColor}; }
+    }
+  }
+}
+
+/*  -- 布局 -- */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.overflow-hidden { overflow: hidden; }
+.border-box { box-sizing: border-box; }
+.pointer { cursor: pointer; }
+
+.fl { float: left; }
+.fr { float: right; }
+
+.cf::after {
+  content: " ";
+  clear: both;
+  display: block;
+  visibility: hidden;
+}
+
+@each $position in relative, absolute, fixed {
+  .#{$position} { position: $position; }
+}
+
+@each $type in inline, inline-block, block, none {
+  .#{$type} { display: $type; }
+}

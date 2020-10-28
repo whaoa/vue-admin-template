@@ -1,0 +1,40 @@
+@import "./base.scss";
+@import "./reset.scss";
+
+html, body, #app {
+  height: 100%;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+.el-drawer:focus {
+  outline: none;
+}
+
+.container {
+  background-color: #f0f2f5;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  > .container-full,
+  > .container-card,
+  > .container-ghost {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: hidden;
+
+    > .el-scrollbar {
+      flex-grow: 1;
+    }
+
+    > .el-scrollbar > .el-scrollbar__wrap {
+      overflow-x: hidden !important;
+    }
+  }
+}

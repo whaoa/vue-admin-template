@@ -1,0 +1,6 @@
+.el-form {
+  // 去除表单中最后一项的下外边距
+  .el-form-item:last-child {
+    margin-bottom: 0;
+  }
+}

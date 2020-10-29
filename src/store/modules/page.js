@@ -81,6 +81,7 @@ export default {
      * @param {Object} route.meta - 路由元信息
      * @param {Object} route.query - 路由参数
      * @param {Object} route.params - 路由参数
+     * @param {Object} route.matched - 路由匹配层级
      */
     open ({ state, commit }, route) {
       if (!route) return;
@@ -108,7 +109,10 @@ export default {
       commit('SET_ACTIVE_PAGE', state.opened.length - 1);
       // TODO: 开启多标签页时是否全部缓存
       // 添加到缓存列表中
-      commit('ADD_CACHE_PAGE', name);
+      commit('SET_STATE', {
+        path: 'cache',
+        data: Array.from(new Set(state.cache.concat(route.matched.map(i => i.name)))),
+      });
       // 如果设置了缓存
       // if (route.meta.cache) commit('ADD_KEEP_ALIVE', route.name);
     },
@@ -122,21 +126,20 @@ export default {
     close ({ state, commit }, index) {
       // 移除要关闭的页面的缓存配置
       if ((state.opened[index] || {}).name) commit('REMOVE_CACHE_PAGE', state.opened[index].name);
-      // 如果要关闭的页面不是当前打开的页面
-      if (state.active !== index) {
-        commit('REMOVE_OPENED_PAGE', index);
-        return;
+      // 修改当前激活页面
+      if (index === state.active) {
+        if (state.active === state.opened.length - 1) {
+          commit('SET_ACTIVE_PAGE', index - 1);
+        } else {
+          commit('SET_ACTIVE_PAGE', index + 1);
+        }
+        // 跳转到新标签页
+        router.push({ path: (state.opened[state.active] || { fullPath: '/' }).fullPath });
+      } else if (index < state.active) {
+        commit('SET_ACTIVE_PAGE', state.active - 1);
       }
-
-      // 如果要关闭的是最后一个
-      if (index === state.opened.length - 1) {
-        commit('SET_ACTIVE_PAGE', index === 0 ? -1 : index - 1);
-      } else {
-        commit('SET_ACTIVE_PAGE', index + 1);
-      }
+      // 移除要关闭的 tab
       commit('REMOVE_OPENED_PAGE', index);
-      // 跳转到新标签页
-      return router.push({ path: state.opened[state.active] || '/' });
     },
 
     /**
@@ -149,7 +152,6 @@ export default {
      * @returns {Promise<Route>}
      */
     closeWithType ({ state, dispatch, commit }, { index, type } = {}) {
-      console.log(index, type);
       switch (type) {
         case 'all':
           commit('REST_STATE');

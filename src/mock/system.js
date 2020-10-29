@@ -13,7 +13,7 @@ export default [
               title: '首页概览',
               name: 'Home',
               icon: 'dashboard',
-              is_show: true,
+              hidden: false,
               actions: ['add', 'edit'],
             },
             {
@@ -21,7 +21,6 @@ export default [
               title: '测试',
               name: 'Father',
               icon: 'dashboard',
-              is_show: true,
               children: [
                 {
                   path: '/father/children1',

@@ -44,11 +44,12 @@ function routesCompiler (asyncRoutes = [], localRoutes = {}, parent) {
     const meta = {
       icon: cur.icon,
       title: cur.title,
-      hidden: !cur.is_show,
+      hidden: !!cur.hidden,
+      showAsRoot: !!cur.root,
+      breadcrumb: typeof cur.breadcrumb === 'undefined' ? true : cur.breadcrumb,
+      navClickable: true,
       operation: cur.actions || [],
     };
-
-    console.log(cur.path);
 
     // 生成临时路由配置对象
     const temp = {
@@ -148,7 +149,6 @@ export default {
       if (!routes) routes = await menus.get();
       // 生成路由配置树
       const children = transformRoutes(routes);
-      console.log(children);
       // 获取第一个路由配置作为首页
       const home = findFirstRoute(children);
       // 重置路由对象

@@ -2,7 +2,7 @@
   <div class="admin-layout-toolbar flex align-center px20 py10">
     <!-- 操作按钮 -->
     <div class="button mr15">
-      <span class="el-icon-refresh pointer" />
+      <span class="el-icon-refresh pointer" @click="refresh" />
     </div>
     <!-- 面包屑导航 -->
     <div class="breadcrumb flex align-center">
@@ -22,7 +22,17 @@ export default {
   name: 'Toolbar',
   computed: {
     route () {
-      return this.$route.matched.slice(1);
+      return this.$route.matched.slice(1).filter(i => {
+        if (!i.meta || typeof i.meta.breadcrumb === 'undefined') return true;
+        return i.meta.breadcrumb;
+      });
+    },
+  },
+  methods: {
+    async refresh () {
+      this.$store.commit('page/REMOVE_CACHE_PAGE', this.$route.name);
+      await this.$nextTick();
+      await this.$router.replace({ name: 'refresh' });
     },
   },
 };

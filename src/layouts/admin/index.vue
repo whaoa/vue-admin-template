@@ -6,7 +6,9 @@
       <page-tab />
       <toolbar />
       <div class="container flex-1 flex flex-column">
-        <al-container type="router" />
+        <transition name="fade-transverse">
+          <al-container type="router" />
+        </transition>
       </div>
       <settings />
     </div>

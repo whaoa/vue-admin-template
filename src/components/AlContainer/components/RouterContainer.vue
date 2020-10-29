@@ -9,7 +9,7 @@ export default {
   name: 'RouterContainer',
   computed: {
     cache () {
-      return ['Home'].concat(this.$store.state.page.cache);
+      return ['Home', 'Refresh'].concat(this.$store.state.page.cache);
     },
   },
 };

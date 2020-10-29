@@ -1,20 +1,23 @@
 <template>
-  <div>
-    <template v-for="item in routes">
-      <!-- 如果有子路由 -->
-      <el-submenu v-if="item.children && item.children.length" :key="item.name" :index="item.name">
-        <template slot="title">
-          <i class="el-icon-location" />
-          <span slot="title">{{ (item.meta || { title: '未命名' }).title }}</span>
-        </template>
-        <menu-item :routes="item.children" />
-      </el-submenu>
-      <!-- 如果是路由 -->
-      <el-menu-item v-else :key="item.name" :index="item.name" @click="menuClick(item)">
-        <i class="el-icon-menu" />
-        <span slot="title">{{ (item.meta || { title: '未命名' }).title }}</span>
-      </el-menu-item>
-    </template>
+  <div v-if="!(route.meta || { hidden: false }).hidden">
+    <!-- 如果是路由 -->
+    <el-menu-item
+      v-if="!children.length || route.meta.tabs || (route.meta || {}).showAsRoot"
+      :key="route.name"
+      :index="route.path"
+      @click="menuClick(route)"
+    >
+      <i class="el-icon-menu" />
+      <span slot="title">{{ (route.meta || { title: '未命名' }).title }}</span>
+    </el-menu-item>
+    <!-- 如果有子路由 -->
+    <el-submenu v-else :key="route.name" :index="route.path">
+      <template slot="title">
+        <i class="el-icon-location" />
+        <span slot="title">{{ (route.meta || { title: '未命名' }).title }}</span>
+      </template>
+      <menu-item v-for="child in children" :key="child.name" :route="child" />
+    </el-submenu>
   </div>
 </template>
 
@@ -22,9 +25,15 @@
 export default {
   name: 'MenuItem',
   props: {
-    routes: {
-      type: Array,
+    route: {
+      type: Object,
       required: true,
+    },
+  },
+  computed: {
+    children () {
+      if (!this.route.children || !this.route.children.length) return [];
+      return this.route.children.filter(i => !(i.meta || {}).hidden);
     },
   },
   methods: {

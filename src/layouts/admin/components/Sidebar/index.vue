@@ -8,14 +8,14 @@
     <div class="sidebar-menus flex-1 relative">
       <!-- 菜单数据 -->
       <el-scrollbar wrap-class="scrollbar-wrapper">
-        <el-menu class="w-full" mode="vertical" :default-active="active" :collapse="collapse" :collapse-transition="false">
-          <el-submenu index="test">
-            <template slot="title">
-              <i class="el-icon-location" />
-              <span slot="title">123123</span>
-            </template>
-          </el-submenu>
-          <menu-item :routes="menus" />
+        <el-menu
+          class="w-full"
+          mode="vertical"
+          :default-active="active"
+          :collapse="collapse"
+          :collapse-transition="false"
+        >
+          <menu-item v-for="item in menus" :key="item.name" :route="item" />
         </el-menu>
       </el-scrollbar>
 
@@ -46,7 +46,7 @@ export default {
     },
 
     active () {
-      return this.$route.name;
+      return (this.$route.meta || {}).activeMenuPath || this.$route.path;
     },
   },
 };

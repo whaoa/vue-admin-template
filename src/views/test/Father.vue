@@ -5,6 +5,8 @@
       <p v-for="i in list" :key="i">{{ i }}</p>
     </al-container>
     <al-container type="router" />
+    <!--<el-button @click="$router.replace('/father/children2')">Home</el-button>-->
+    <el-input v-model="value" />
   </al-container>
 </template>
 
@@ -14,6 +16,7 @@ export default {
   data () {
     return {
       list: [1, 2],
+      value: '',
     };
   },
   mounted () {

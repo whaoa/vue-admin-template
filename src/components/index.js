@@ -1,4 +1,5 @@
 import AlContainer from './AlContainer';
+import AlTable from './AlTable';
 
 export { default as AlContainer } from './AlContainer';
 export { default as AlCardContainer } from './AlContainer/components/CardContainer';
@@ -8,6 +9,7 @@ export { default as AlRouterContainer } from './AlContainer/components/RouterCon
 
 const components = {
   AlContainer,
+  AlTable,
 };
 
 export default {

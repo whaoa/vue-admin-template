@@ -73,7 +73,6 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(to => {
   // 结束进度条
   NProgress.done();
-  // TODO 更改标题
   document.title = (to.meta || {}).title || process.env.VUE_APP_TITLE;
 });
 

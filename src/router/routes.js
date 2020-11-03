@@ -16,6 +16,9 @@
 
 import { login } from '@/router/modules/system';
 
+import demo from '@/router/modules/demo';
+import components from '@/router/modules/components';
+
 // 系统路由配置
 export { default as systemRoutes } from '@/router/modules/system';
 
@@ -23,9 +26,9 @@ export const notFoundRouter = { path: '*', redirect: { name: '404' }, hidden: tr
 
 export const routerComponents = {
   Home: { component: () => import('@/views/home') },
-  Father: { component: () => import('@/views/test/Father') },
-  Children1: { component: () => import('@/views/test/Children1') },
-  Children2: { component: () => import('@/views/test/Children2') },
+
+  ...demo,
+  ...components,
 };
 
 export default [

@@ -1,5 +1,5 @@
 <template>
-  <component :is="component" v-bind="$attrs">
+  <router-container v-if="type === 'router'">
     <template v-if="$slots.header" #header>
       <slot name="header" />
     </template>
@@ -7,31 +7,59 @@
     <template v-if="$slots.footer" #footer>
       <slot name="footer" />
     </template>
-  </component>
+  </router-container>
+
+  <full-container v-else-if="type === 'full'">
+    <template v-if="$slots.header" #header>
+      <slot name="header" />
+    </template>
+    <slot />
+    <template v-if="$slots.footer" #footer>
+      <slot name="footer" />
+    </template>
+  </full-container>
+
+  <ghost-container v-else-if="type === 'ghost'">
+    <template v-if="$slots.header" #header>
+      <slot name="header" />
+    </template>
+    <slot />
+    <template v-if="$slots.footer" #footer>
+      <slot name="footer" />
+    </template>
+  </ghost-container>
+
+  <card-container v-else>
+    <template v-if="$slots.header" #header>
+      <slot name="header" />
+    </template>
+    <slot />
+    <template v-if="$slots.footer" #footer>
+      <slot name="footer" />
+    </template>
+  </card-container>
 </template>
 
 <script>
-const containers = {
-  full: () => import('./components/FullContainer'),
-  ghost: () => import('./components/GhostContainer'),
-  card: () => import('./components/CardContainer'),
-  router: () => import('./components/RouterContainer'),
-};
+import FullContainer from '@/components/AlContainer/components/FullContainer';
+import CardContainer from '@/components/AlContainer/components/CardContainer';
+import RouterContainer from '@/components/AlContainer/components/RouterContainer';
+import GhostContainer from '@/components/AlContainer/components/GhostContainer';
 
 export default {
   name: 'AlContainer',
+
+  components: {
+    FullContainer,
+    CardContainer,
+    RouterContainer,
+    GhostContainer,
+  },
 
   props: {
     type: {
       type: String,
       default: 'card',
-    },
-  },
-
-  computed: {
-    // 始终返回渲染组件
-    component () {
-      return containers[this.type] || containers.card;
     },
   },
 };

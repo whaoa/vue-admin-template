@@ -34,6 +34,18 @@ export default [
               title: '测试2',
               name: 'Children2',
             },
+            {
+              path: 'components',
+              title: '通用组件',
+              name: 'Components',
+              children: [
+                {
+                  path: 'table',
+                  title: '数据表格',
+                  name: 'TableComponent',
+                },
+              ],
+            },
           ],
         },
         {

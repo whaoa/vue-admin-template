@@ -10,17 +10,16 @@
           <al-container type="router" />
         </transition>
       </div>
-      <settings />
     </div>
   </div>
 </template>
 
 <script>
-import { Sidebar, HeaderBar, Toolbar, PageTab, Settings } from './components';
+import { Sidebar, HeaderBar, Toolbar, PageTab } from './components';
 
 export default {
   name: 'AdminLayout',
-  components: { Sidebar, HeaderBar, Toolbar, PageTab, Settings },
+  components: { Sidebar, HeaderBar, Toolbar, PageTab },
 };
 </script>
 

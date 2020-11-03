@@ -7,15 +7,17 @@
  * @property {String} meta.title - 路由名称
  * @property {String} [meta.icon] - 侧边栏显示的图标
  * @property {Boolean} [meta.cache] - 是否需要缓存
- * @property {String} [meta.activeMenuPath] - 当前路由对应需要高亮侧边栏路由的路径
+ * @property {String} [meta.activeMenuName] - 当前路由对应需要高亮侧边栏路由的 name
  * @property {Boolean} [meta.hidden=false] - 是否在侧边栏中隐藏, 默认为 false
  * @property {Boolean} [meta.showAsRoot=false] - 是否要在侧边栏当作一级路由显示, 默认为 false
  * @property {Boolean} [meta.breadcrumb=true] - 是否在面包屑导航中显示, 默认为 true
  * @property {Boolean} [meta.navClickable=true] - 是否在面包屑导航中可点击, 默认为 true (同 vue-element-admin 的 redirect=noRedirect)
  */
 
+import { login } from '@/router/modules/system';
+
 // 系统路由配置
-import system from '@/router/modules/system';
+export { default as systemRoutes } from '@/router/modules/system';
 
 export const notFoundRouter = { path: '*', redirect: { name: '404' }, hidden: true };
 
@@ -26,4 +28,6 @@ export const routerComponents = {
   Children2: { component: () => import('@/views/test/Children2') },
 };
 
-export default system;
+export default [
+  login,
+];

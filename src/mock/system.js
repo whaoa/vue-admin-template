@@ -7,9 +7,9 @@ export default [
         {
           title: '工作台',
           name: 'workbench',
-          menus: [
+          children: [
             {
-              path: '/home',
+              path: 'home',
               title: '首页概览',
               name: 'Home',
               icon: 'dashboard',
@@ -17,20 +17,20 @@ export default [
               actions: ['add', 'edit'],
             },
             {
-              path: '/father',
+              path: 'father',
               title: '测试',
               name: 'Father',
               icon: 'dashboard',
               children: [
                 {
-                  path: '/father/children1',
+                  path: 'children1',
                   title: '测试1',
                   name: 'Children1',
                 },
               ],
             },
             {
-              path: '/father/children2',
+              path: 'children2',
               title: '测试2',
               name: 'Children2',
             },

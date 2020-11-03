@@ -4,14 +4,14 @@
     <el-menu-item
       v-if="!children.length || route.meta.tabs || (route.meta || {}).showAsRoot"
       :key="route.name"
-      :index="route.path"
+      :index="route.name"
       @click="menuClick(route)"
     >
       <i class="el-icon-menu" />
       <span slot="title">{{ (route.meta || { title: '未命名' }).title }}</span>
     </el-menu-item>
     <!-- 如果有子路由 -->
-    <el-submenu v-else :key="route.name" :index="route.path">
+    <el-submenu v-else :key="route.name" :index="route.name">
       <template slot="title">
         <i class="el-icon-location" />
         <span slot="title">{{ (route.meta || { title: '未命名' }).title }}</span>
@@ -24,6 +24,7 @@
 <script>
 export default {
   name: 'MenuItem',
+  inject: ['refresh'],
   props: {
     route: {
       type: Object,
@@ -38,8 +39,9 @@ export default {
   },
   methods: {
     menuClick (route) {
-      if (route.link) window.open(route.link);
-      else this.$router.push({ name: route.name });
+      if (route.link) return window.open(route.link);
+      if (route.name === this.$route.name) return this.refresh();
+      this.$al.tabs.open({ name: route.name });
     },
   },
 };

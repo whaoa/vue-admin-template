@@ -1,6 +1,6 @@
 import { _ } from '@/utils';
 import router from '@/router';
-import systemRoutes from '@/router/modules/system';
+import { systemRoutes } from '@/router/routes';
 
 const systemRouteName = systemRoutes.map(i => i.name);
 
@@ -9,6 +9,7 @@ function defaultState () {
     active: -1,
     opened: [],
     cache: [],
+    history: {},
   };
 }
 
@@ -41,6 +42,18 @@ export default {
         return;
       }
       state.opened.splice(index, 1);
+    },
+
+    ADD_HISTORY_RECORD (state, { fullPath, meta: { title } }) {
+      const active = state.opened[state.active];
+      if (!active) return;
+      if (!state.history[active.fullPath]) state.history[active.fullPath] = [];
+      state.history[active.fullPath].push({ title, fullPath });
+    },
+    SUB_HISTORY_RECORD (state) {
+      const active = state.opened[state.active];
+      if (!active || !state.history[active.fullPath]) return;
+      state.history[active.fullPath].splice(state.history[active.fullPath].length - 1, 1);
     },
 
     // 添加需要缓存的组件名称

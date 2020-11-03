@@ -5,6 +5,6 @@ export default {
   token: state => state.user.info.token,
   // 侧边栏菜单
   sidebarMenus (state) {
-    return (state.routes.routes[state.routes.active || 0] || { children: [] }).children;
+    return state.router.routes;
   },
 };

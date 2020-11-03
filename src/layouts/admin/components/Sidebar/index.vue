@@ -46,7 +46,7 @@ export default {
     },
 
     active () {
-      return (this.$route.meta || {}).activeMenuPath || this.$route.path;
+      return (this.$route.meta || {}).activeMenuName || this.$route.name;
     },
   },
 };

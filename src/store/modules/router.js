@@ -1,6 +1,6 @@
 import { Cache, _ } from '@/utils';
 import router, { resetRouter } from '@/router';
-import { routerComponents, notFoundRouter } from '@/router/routes';
+import { systemRoutes, routerComponents, notFoundRouter } from '@/router/routes';
 
 import { menus } from '@/api/system';
 import { AdminLayout, ChildLayout, TabsLayout } from '@/layouts';
@@ -9,10 +9,9 @@ export const routesCache = new Cache('routes');
 
 function defaultState () {
   return {
-    // 当前显示的侧边菜单组的 name
-    active: '',
-    // 处理后生成的数据
-    routes: {},
+    index: null,
+    routes: [],
+    raw: [],
   };
 }
 
@@ -101,23 +100,23 @@ function transformRoutes (routeGroup = []) {
   if (routeGroup.length === 0) return [];
 
   return routeGroup.reduce((result, group) => {
-    if (!group.link && (!group.menus || !group.menus.length)) return result;
+    if (!group.link && (!group.children || !group.children.length)) return result;
 
-    const { name, path, title, menus } = group;
+    const { name, path, title, children } = group;
 
     const item = { name, path: path || '/' + name, meta: { title } };
 
     if (group.link) item.link = group.link;
 
-    if (menus && menus.length) {
-      item.children = routesCompiler(menus, routerComponents);
+    if (children && children.length) {
+      item.children = routesCompiler(children, routerComponents);
     }
 
     if (item.children && item.children.length) {
       const redirect = findFirstRoute(item.children);
       if (redirect.name) item.redirect = { name: redirect.name };
     }
-    item.component = ChildLayout;
+    item.component = AdminLayout;
     result.push(item);
     return result;
   }, []);
@@ -144,44 +143,38 @@ export default {
   },
 
   actions: {
-    async generateRoutes ({ state, commit }, routes) {
+    async generateRoutes ({ dispatch, commit }, routes) {
       // 获取路由数据
       if (!routes) routes = await menus.get();
-      // 生成路由配置树
-      const children = transformRoutes(routes);
-      // 获取第一个路由配置作为首页
-      const home = findFirstRoute(children);
-      // 重置路由对象
-      if (state.routes.length) resetRouter();
-      // 追加新路由
-      router.addRoutes([
-        {
-          name: 'root',
-          path: '/',
-          component: AdminLayout,
-          children,
-          redirect: { name: home.name },
-        },
-        notFoundRouter,
-      ]);
-      // 保存数据到 store
-      commit('SET_STATE', {
-        path: 'routes',
-        data: children.reduce((acc, cur) => {
-          acc[cur.name] = cur;
-          return acc;
-        }, {}),
-      });
-      commit('SET_STATE', { path: 'active', data: children[0].name });
+      // 保存数据到 state
+      commit('SET_STATE', { path: 'raw', data: routes });
       // 处理完成后，将原数据缓存到本地
-      routesCache.set('routes', routes);
-      // 返回首页路由配置
-      return { name: home.name, path: home.path };
+      routesCache.set('raw', routes);
+      // 切换菜单
+      return dispatch('switchMenu');
+    },
+
+    switchMenu ({ state, commit }, index = 0) {
+      // 生成路由配置树
+      const [route] = transformRoutes([state.raw[index]]);
+      // 重置路由对象
+      if (typeof state.index === 'number') resetRouter();
+      // 保存页面路由数据到 state
+      commit('SET_STATE', { path: 'routes', data: route.children });
+      // 追加新路由
+      route.children = route.children.concat(systemRoutes, notFoundRouter);
+      router.addRoutes([
+        { path: '/', redirect: { name: route.redirect.name } },
+        route,
+      ]);
+      // 设置菜单激活下标
+      commit('SET_STATE', { path: 'index', data: index });
+      return { name: route.redirect.name };
     },
 
     init ({ rootState, dispatch }) {
       if (!rootState.user.info.token) throw new ReferenceError('缺少TOKEN');
-      const routes = routesCache.get('routes');
+      const routes = routesCache.get('raw');
       return dispatch('generateRoutes', routes);
     },
   },

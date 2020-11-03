@@ -6,9 +6,11 @@ import App from './App.vue';
 
 import store from '@/store';
 import router from '@/router';
+import Al from '@/plugins/al';
 import components from '@/components';
 
-Vue.use(ElementUI, { size: 'medium' });
+Vue.use(Al);
+Vue.use(ElementUI);
 Vue.use(components);
 
 // 仅在非生产环境下引入 mock

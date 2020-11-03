@@ -1,9 +1,9 @@
 <template>
   <div class="admin-layout-header pr15 flex align-center relative">
     <!-- 顶部导航 -->
-    <el-menu class="flex-1" mode="horizontal" :default-active="active">
-      <el-menu-item v-for="item in menus" :key="item.name" :index="item.name" @click="handleMenuSelect(item)">
-        {{ (item.meta || { title: '未命名' }).title }}
+    <el-menu class="flex-1" mode="horizontal" :default-active="$route.matched[0].name">
+      <el-menu-item v-for="(item, index) in menus" :key="item.name" :index="item.name" @click="handleMenuSelect(item, index)">
+        {{ item.title }}
       </el-menu-item>
     </el-menu>
     <!-- 个人中心 -->
@@ -28,15 +28,20 @@ export default {
   },
   computed: {
     menus() {
-      return this.$store.state.routes.routes;
+      return this.$store.state.router.raw.map(i => ({ name: i.name, title: i.title, link: i.link }));
     },
     active () {
-      return this.$route.matched[1].name;
+      return this.$route.matched[0].name;
     },
   },
   methods: {
-    handleMenuSelect (e) {
-      console.log(e);
+    handleMenuSelect (route, index) {
+      // 如果是外链
+      if (route.link) return window.open(route.link);
+      // 如果是切换菜单
+      if (this.$store.state.routes.index === index) return;
+      this.$store.dispatch('page/closeWithType', { type: 'all' });
+      this.$store.dispatch('router/switchMenu', index);
     },
     logout () {
       this.$store.dispatch('user/logout');

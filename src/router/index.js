@@ -73,9 +73,6 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(to => {
   // 结束进度条
   NProgress.done();
-  // TODO: 未开启标签页时不执行
-  // 更新标签页
-  store.dispatch('page/open', to);
   // TODO 更改标题
   document.title = (to.meta || {}).title || process.env.VUE_APP_TITLE;
 });

@@ -51,7 +51,7 @@ export default {
     async login ({ dispatch, commit }, form = {}) {
       const info = await user.login(form);
       commit('SET_STATE', { path: 'info', data: info });
-      await dispatch('routes/generateRoutes', null, { root: true });
+      await dispatch('router/generateRoutes', null, { root: true });
       return info;
     },
 
@@ -65,7 +65,7 @@ export default {
           });
         }
         commit('REST_STATE');
-        commit('routes/REST_STATE', null, { root: true });
+        commit('router/REST_STATE', null, { root: true });
         commit('system/REST_STATE', null, { root: true });
         await router.replace({ name: 'login' });
       } catch (e) {

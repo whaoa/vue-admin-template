@@ -25,7 +25,7 @@ export default new Vuex.Store({
     init ({ dispatch, getters }) {
       if (getters.token) return Promise.resolve(true);
       return dispatch('user/init')
-        .then(() => dispatch('routes/init'))
+        .then(() => dispatch('router/init'))
         .then(() => dispatch('system/init'))
         .then(() => true)
         .catch(e => {
